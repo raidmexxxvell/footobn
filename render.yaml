@@ -26,7 +26,8 @@ services:
         sync: false
     healthCheckPath: /health
 
-  - type: static
+  - type: web
+    env: static
     name: football-league-frontend
     buildCommand: |
       cd frontend
