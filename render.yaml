@@ -27,13 +27,11 @@ services:
     healthCheckPath: /health
 
   - type: web
+    name: my-frontend
     env: static
-    name: football-league-frontend
-    buildCommand: |
-      cd frontend
-      npm install
-      npm run build
-    publishPath: frontend/dist
+    plan: free
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
     envVars:
       - key: VITE_API_URL
         fromService:
