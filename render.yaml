@@ -25,8 +25,9 @@ services:
         sync: false
     healthCheckPath: /health
 
-  - type: static_site
+  - type: web
     name: my-frontend
+    env: static
     buildCommand: npm install && npm run build
     staticPublishPath: dist
     envVars:
