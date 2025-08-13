@@ -125,7 +125,8 @@ export async function performDailyCheckin(userId: string, now = new Date()): Pro
     updated_at: now.toISOString()
   };
 
-  if (BADGE_RANK[candidateTier] > BADGE_RANK[prevTier]) {
+  // 🔹 Исправление: исключаем 'none' перед вызовом методов и присвоением
+  if (candidateTier !== 'none' && BADGE_RANK[candidateTier] > BADGE_RANK[prevTier]) {
     await repo.supersedeLowerTierAchievements(user.user_id, candidateTier);
     await repo.upsertAchievement({
       user_id: user.user_id,
@@ -136,8 +137,8 @@ export async function performDailyCheckin(userId: string, now = new Date()): Pro
       superseded: false
     });
 
-    (updatedUser as any).badge_tier = candidateTier;
-    (updatedUser as any).badge_unlocked_at = now.toISOString();
+    updatedUser.badge_tier = candidateTier;
+    updatedUser.badge_unlocked_at = now.toISOString();
     badgeUpdated = { newTier: candidateTier, replaced: prevTier !== 'none' ? prevTier : undefined };
   }
 
