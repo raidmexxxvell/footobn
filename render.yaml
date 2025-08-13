@@ -19,17 +19,20 @@ services:
         sync: false
       - key: PGSSLMODE
         value: require
+      # Ниже — опционально, если хочешь экспорт/чтение из Sheets
       - key: GOOGLE_SHEETS_ID
         sync: false
       - key: GOOGLE_SERVICE_ACCOUNT_JSON
         sync: false
     healthCheckPath: /health
 
-  - type: web
-    name: my-frontend
-    env: static
-    buildCommand: npm install && npm run build
-    staticPublishPath: dist
+  - type: static
+    name: football-league-frontend
+    buildCommand: |
+      cd frontend
+      npm install
+      npm run build
+    publishPath: frontend/dist
     envVars:
       - key: VITE_API_URL
         fromService:
