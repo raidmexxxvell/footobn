@@ -7,6 +7,7 @@ dotenv.config();
 import { checkinRouter } from './routes/checkin';
 import { achievementsRouter } from './routes/achievements';
 import { profileRouter } from './routes/profile';
+import telegramBotApp from './telegramBot';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -14,6 +15,8 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
+
+app.use(telegramBotApp);
 app.use('/checkin', checkinRouter);
 app.use('/achievements', achievementsRouter);
 app.use('/profile', profileRouter);
