@@ -21,13 +21,17 @@ export function ProfilePage({ userId }: { userId: string }) {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   async function loadProfile() {
     setLoading(true);
+    setError(null);
     try {
       const res = await api.get(`/profile?user_id=${userId}`);
       setProfile(res.data.profile);
       setLeaderboard(res.data.leaderboard);
+    } catch (e) {
+      setError('Ошибка загрузки профиля. Проверьте подключение.');
     } finally {
       setLoading(false);
     }
@@ -37,8 +41,14 @@ export function ProfilePage({ userId }: { userId: string }) {
     loadProfile();
   }, []);
 
-  if (loading || !profile) {
+  if (loading) {
     return <div>Загрузка профиля…</div>;
+  }
+  if (error) {
+    return <div style={{color: 'red', background: '#222', padding: 16, borderRadius: 8}}>{error}</div>;
+  }
+  if (!profile) {
+    return <div>Нет данных профиля.</div>;
   }
 
   const xpProgress = ((profile.xp % 100) / 100) * 100;
